@@ -2,41 +2,125 @@
 #define FILESYSTEM_H
 
 #include <iostream>
-#include <fstream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <regex>
-#include <string>
 #include <vector>
-
-#define DATA_START 1024
-#define BLOCK_OFFSET 511
-#define FILE_TABLE_FIXED 64
-#define MAX_BYTES 131072
-
-using namespace std;
-
+#include <cstring>
+#include "DiskDrive.h"
+using namespace std; 
 class FileSystem {
-protected:
-int fileTablePosition;
-int maxBuffer;
-int maxSize;
-unsigned char bytes[MAX_BYTES];
 public:
-FileSystem();
-int blockStart(int);
-int writeToSystem(char *, int*);
-int* claimBlocks(int);
-int* findFileBlocks(char *);
-virtual void deleteFile(char *);
-virtual void displayFile(char *);
-virtual void readFile(char *, char *);
-void printBitmap();
-void printBlock(int);
-void printTable();
-void printVector(vector<int>);
-virtual void writeFile(char *, char *);
-void writeToTable(char *, int*, int);
+    FileSystem(const std::string& allocationMethod, DiskDrive& diskDrive) : allocationMethod(allocationMethod), diskDrive(diskDrive){ 
+        diskDrive.initializeStorage();
+        diskDrive.initializeBitmap(); 
+    }
+
+    void confirmFilesystem() {
+        std::cout << "Allocation method is " << allocationMethod << std::endl;
+    }
+
+    void getFile(){
+        if(allocationMethod == "Contiguous"){
+            cout << "I am getting the Contiguous file" << endl;
+            diskDrive.readBlock();
+            cout << endl;
+        }
+        else if(allocationMethod == "Indexed"){
+            cout << "I am getting the Indexed file" << endl;
+            diskDrive.readBlock();
+            cout << endl;
+        }
+        else if(allocationMethod == "Chained"){
+            cout << "I am getting the chained file" << endl;
+            diskDrive.readBlock();
+            cout << endl;
+        }
+        else{
+            cout << "No valid allocatio nmethod" << endl;
+        }
+    }
+
+    void getFileTable(){
+        if(allocationMethod == "Contiguous"){
+            cout << "I am getting the file table contiguous" << endl;
+            cout << endl;
+        }
+        else if(allocationMethod == "Indexed"){
+            cout << "I am getting the file table indexed" << endl;
+            cout << endl;
+        }
+        else if(allocationMethod == "Chained"){
+            cout << "I am getting the file table chained" << endl;
+            cout << endl; 
+        }
+        else{
+            cout << "Not a valid file method" << endl; 
+            cout << endl;
+        }
+    }
+
+    void getFSB(){
+        if(allocationMethod == "Contiguous"){
+            cout << "I am getting the free space bitmap contiguous" << endl;
+            cout << endl;
+        }
+        else if(allocationMethod == "Indexed"){
+            cout << "I am getting the free space bitmap indexed" << endl; 
+            cout << endl;
+        }
+        else if(allocationMethod == "Chained"){
+            cout << "I am getting the free space bitmap chained" << endl;
+            cout << endl;
+        }
+        else{
+            cout << "No allocation method" << endl;
+            cout << endl; 
+        }
+    }
+
+    void DiskBlock(){
+        if(allocationMethod == "Contiguous"){
+            cout << "I am getting the disk block contiguous" << endl;
+            cout << endl;
+        }
+        else if(allocationMethod == "Indexed"){
+            cout << "I am getting the disk block indexed" << endl;
+            cout << endl;
+        }
+        else if(allocationMethod == "Chained"){
+            cout << "I am getting the disk block chained" << endl;
+            cout << endl;
+        }
+        else{
+            cout << "No allocation method" << endl;
+            cout << endl; 
+        }
+    }
+
+    void writeFile(){
+        if(allocationMethod == "Contiguous"){
+            cout << "Writing disk contiguous" << endl;
+            diskDrive.writeBlock();
+            cout << endl;
+        }
+        else if(allocationMethod == "Indexed"){
+            cout << "Writing disk indexed" << endl;
+            diskDrive.writeBlock();
+            cout << endl;
+        }
+        else if(allocationMethod == "Chained"){
+            cout << "Writing disk chained" << endl;
+            diskDrive.writeBlock();
+            cout << endl;
+        }
+        else{
+            cout << "no allocation method" << endl;
+            cout << endl;   
+        }
+    }
+    // Other necessary methods for the file system go here
+
+private:
+    string allocationMethod;
+    DiskDrive& diskDrive; 
 };
 
 #endif
